@@ -39,9 +39,9 @@ def send_welcome(message):
 @tb.message_handler(commands=['restart'])
 def send_welcome(message):
 	os.system("sudo systemctl restart datacam_app.service")
-	tb.send_message(message.chat.id, "app reinciado")
+	tb.send_message(message.chat.id, "app reinciada")
 	os.system("sudo systemctl restart datacam_smtp.service")
-	tb.send_message(message.chat.id,"smtp receiver reninicaido")
+	tb.send_message(message.chat.id,"events receiver reninicaido")
 
 @tb.message_handler(commands=['modo'])
 def send_welcome(message):
