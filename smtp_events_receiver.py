@@ -15,13 +15,11 @@ from email.policy import default
 import datetime
 import requests
 
-
 def save_log(arg):
     f = open("smtp_log.txt", "a")
     f.write(str(datetime.datetime.now()) + " " +str(arg) + "\n\n")
     f.close()
     return
-
 i = 0
 class CustomSMTPServer(smtpd.SMTPServer):
 	def process_message(self, peer, mailfrom, rcpttos, data, mail_options=None, rcpt_options=None):
@@ -95,8 +93,7 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			return
 		except Exception as Argument:
 			save_log(Argument)
-
-	def _save_media(self,image,event_json,exten):#guardar imagen cuando encuentre una
+	def _save_media(self,image,event_json,exten):
 		try:
 			fechayhora=str(event_json["hora"])
 			tiempo = fechayhora.replace(":","-")[:-7]
@@ -110,9 +107,6 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			save_log(Argument)
 	def _save_event(self,event_json):
 		try:
-			#db_connect = create_engine('mysql+pymysql://'+db_username+':'+db_user_pw+'@'+db_ip+':'+db_port+'/'+db_name)
-			#Session = sessionmaker(db_connect)
-			#session = Session()
 			evento = Events()
 			evento.hora = event_json['hora']
 			evento.device_id = event_json['device_id']
@@ -144,13 +138,13 @@ class CustomSMTPServer(smtpd.SMTPServer):
 					save_log(Argument)
 			session.close()
 		except Exception as Argument:
-
 			save_log(Argument)
 			os.system("sudo systemctl restart datacam_smtp.service")
 image_folder = ""
 server_ip = ""
 server_port = ""
 path = ""
+
      ## LEYENDO LAS SETTINGS ###
 parser = ConfigParser()
 parser.read("configs/config_smtp.ini")
@@ -189,6 +183,7 @@ try:
 	session = Session()
 except:
 	print("Error Conectando con la Base de datos")
+	
 print("##### Systema de Recepcion de mails ##### \n IP Actual: "+ server_ip +"\n Puerto Actual: "+ server_port + "\n Directorio Actual: "+ path +"\n Nombre de La BD: "+ db_name +"\n IP de la DB: "+ db_ip +"\n Puerto de la DB: "+ db_port +"\n Usuario de la DB: "+ db_username +"\n si desea hace un cambio ingrese los demas valores en el mismo orden\n")
 
 server = CustomSMTPServer((server_ip, int(server_port)), None)
