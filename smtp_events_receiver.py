@@ -16,7 +16,7 @@ import datetime
 import requests
 
 def save_log(arg):
-    f = open("smtp_log.txt", "a")
+    f = open("logs/smtp_log.txt", "a")
     f.write(str(datetime.datetime.now()) + " " +str(arg) + "\n\n")
     f.close()
     return
