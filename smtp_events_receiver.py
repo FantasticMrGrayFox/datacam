@@ -93,6 +93,8 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			return
 		except Exception as Argument:
 			save_log(Argument)
+			os.system("sudo systemctl restart datacam_smtp.service")
+			return
 	def _save_media(self,image,event_json,exten):
 		try:
 			fechayhora=str(event_json["hora"])
@@ -103,8 +105,8 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			imagen = str(event_json["device_id"]) + "_" + tiempo + exten
 			event_json["imagepath"] = imagen.replace(" ","-")
 		except Exception as Argument:
-			os.system("sudo systemctl restart datacam_smtp.service")
 			save_log(Argument)
+			os.system("sudo systemctl restart datacam_smtp.service")
 	def _save_event(self,event_json):
 		try:
 			evento = Events()
