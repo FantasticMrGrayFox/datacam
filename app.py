@@ -64,7 +64,7 @@ db.init_app(app)
 #session = Session()
 
 def save_log(arg):
-    f = open("logs/app_log.txt", "a")
+    f = open("app_log.txt", "a")
     f.write(str(datetime.datetime.now()) + " " +str(arg) + "\n\n")
     f.close()
     return
@@ -172,12 +172,12 @@ class event_notification(Resource):
                         if(evento.attach_path.endswith(".mp4")):
                             try:
                                 # Ejemplo tb.send_message('109556849', 'Hola mundo!')
-                                tb.send_video(eventos[i].id_chat, media, " " ,media)
+                                tb.send_video(eventos[i].id_chat, media, " " , mensaje)
                                 print("OK")
                                 evento.hora_confirmacion = datetime.datetime.now()
                                 j = j + 1
                             except Exception as Argument:
-                                save_log(Argument + "no se pudo enviar el video")
+                                save_log(Argument)
                                 print("time out")
                                 #evento.respuesta =  "Time Out " + str(j) + "/" + str(i)
                                 exito = false
