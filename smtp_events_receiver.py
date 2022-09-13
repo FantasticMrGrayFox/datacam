@@ -60,13 +60,13 @@ class CustomSMTPServer(smtpd.SMTPServer):
 					session.commit()
 					print("Hora acutal",now,"Hora limite",event.hora +  datetime.timedelta(seconds = tarpit) )
 					print("spam")
-					#return
+					return
 				if( int(event.image_length) == len(data)):
 					event.repetidas = event.repetidas + 1
 					session.add(event)
 					session.commit()
 					print("clon")
-					#return
+					return
 				event_json['spam'] = event.spameos
 				event_json['clon'] = event.spameos
 			msg = email.message_from_bytes(data, policy=default)

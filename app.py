@@ -219,6 +219,8 @@ class event_notification(Resource):
             return
         except Exception as Argument:
             save_log(Argument)
+            os.system("sudo systemctl restart datacam_api.service")
+            os.system("sudo systemctl restart datacam_app.service")
 # ------------------- . ------------------- #
 
 
