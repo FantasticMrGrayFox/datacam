@@ -199,6 +199,7 @@ class event_notification(Resource):
                                 #remove(path)
                     except Exception as Argument:
                         save_log(Argument)
+                        os.system("sudo systemctl restart datacam_app.service")
                 i = i+1
             if (exito == true):
                 evento.respuesta = "OK " + str(j) + "/" + str(i)
@@ -219,7 +220,6 @@ class event_notification(Resource):
             return
         except Exception as Argument:
             save_log(Argument)
-            os.system("sudo systemctl restart datacam_api.service")
             os.system("sudo systemctl restart datacam_app.service")
 # ------------------- . ------------------- #
 
