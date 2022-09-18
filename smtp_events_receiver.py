@@ -1,12 +1,12 @@
 from email.mime import image
 from sqlalchemy.sql.expression import func
-import smtpd
+import smtpd 
 import asyncore
 import email
 import mimetypes
 from sqlalchemy import create_engine
 from sqlalchemy.orm import session,sessionmaker,relationship#import sqlAlchemy
-from model import *
+from model import * 
 import os
 import sys
 import time
@@ -14,7 +14,6 @@ from configparser import ConfigParser
 from email.policy import default
 import datetime
 import requests
-import test_simple_sender
 
 def save_log(arg, msj):
     f = open("logs/smtp_log.txt", "a")
