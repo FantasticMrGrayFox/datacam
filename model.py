@@ -1,6 +1,8 @@
 from sqlalchemy import Column,Integer,String,ForeignKey,DateTime
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import declarative_base
 from flask import Flask
+
 #Base = declarative_base()
 #app = Flask(__name__)
 #api = Api(app)

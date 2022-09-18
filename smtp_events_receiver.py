@@ -14,10 +14,11 @@ from configparser import ConfigParser
 from email.policy import default
 import datetime
 import requests
+import test_simple_sender
 
-def save_log(arg):
+def save_log(arg, msj):
     f = open("logs/smtp_log.txt", "a")
-    f.write(str(datetime.datetime.now()) + " " +str(arg) + "\n\n")
+    f.write(str(datetime.datetime.now()) + " %s  %s \n\n"%(arg,msj) )
     f.close()
     return
 i = 0
@@ -66,7 +67,7 @@ class CustomSMTPServer(smtpd.SMTPServer):
 					session.add(event)
 					session.commit()
 					print("clon")
-					return
+					#return
 				event_json['spam'] = event.spameos
 				event_json['clon'] = event.spameos
 			msg = email.message_from_bytes(data, policy=default)
@@ -87,14 +88,16 @@ class CustomSMTPServer(smtpd.SMTPServer):
 					filename = f'texto-{counter:03d}{ext}'
 				else:
 					if filename.endswith(".jpg") or filename.endswith(".mp4"):
+						#test_simple_sender.send_p(part.get_payload(decode=True))
 						self._save_media(image = part.get_payload(decode=True),event_json = event_json,exten = filename[-4:])
 				counter += 1
 			self._save_event(event_json)
 			return
 		except Exception as Argument:
-			save_log(Argument)
-			os.system("sudo systemctl restart datacam_smtp.service")
+			save_log(Argument, "fallo procesando el mensaje")
+			#os.system("sudo systemctl restart datacam_smtp.service")
 			return
+			
 	def _save_media(self,image,event_json,exten):
 		try:
 			fechayhora=str(event_json["hora"])
@@ -105,8 +108,9 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			imagen = str(event_json["device_id"]) + "_" + tiempo + exten
 			event_json["imagepath"] = imagen.replace(" ","-")
 		except Exception as Argument:
-			save_log(Argument)
-			os.system("sudo systemctl restart datacam_smtp.service")
+			save_log(Argument,"fallo guardando el msj")
+			#os.system("sudo systemctl restart datacam_smtp.service")
+
 	def _save_event(self,event_json):
 		try:
 			evento = Events()
@@ -125,10 +129,8 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			try:
 				respuesta = requests.get(url)
 			except:
-				print("error conectando con app.py")
-				save_log(Argument)
+				save_log(Argument,"error conectando con app.py")
 			No_of_files = len(os.listdir(image_folder))
-			#print(No_of_files)
 			if(No_of_files > 20):
 				try:	
 					os.chdir(image_folder)
@@ -136,12 +138,11 @@ class CustomSMTPServer(smtpd.SMTPServer):
 					for f in all_files:
 						os.remove(f)
 				except:
-					print("Fallo el proceso de vaciado de la carpeta" + image_folder + ". " +str(No_of_files) + "Archivos restantes" )
-					save_log(Argument)
+					save_log(Argument,str("Fallo el proceso de vaciado de la carpeta" + image_folder + ". " +str(No_of_files) + "Archivos restantes" ))
 			session.close()
 		except Exception as Argument:
-			save_log(Argument)
-			os.system("sudo systemctl restart datacam_smtp.service")
+			save_log(Argument,"error salvando el evento")
+			#os.system("sudo systemctl restart datacam_smtp.service")
 image_folder = ""
 server_ip = ""
 server_port = ""
