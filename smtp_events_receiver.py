@@ -103,7 +103,11 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			tiempo = fechayhora.replace(":","-")[:-7]
 			path_wrong = image_folder + str(event_json["device_id"]) + "_" + tiempo + exten
 			path = path_wrong.replace(" ","-")
-			open(path, 'wb').write(image)
+			try:
+				open(path, 'wb').write(image)
+			except: 
+				os.mkdir(image_folder)
+				open(path, 'wb').write(image)
 			imagen = str(event_json["device_id"]) + "_" + tiempo + exten
 			event_json["imagepath"] = imagen.replace(" ","-")
 		except Exception as Argument:
