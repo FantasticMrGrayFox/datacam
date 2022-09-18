@@ -143,7 +143,6 @@ class event_notification(Resource):
             media = open(path, 'rb')
             try:
                 evento = db.session.query(Events).filter_by(id = id).first()
-                ##evento = Events.query.get(id)
                 user = evento.device.usuarios
                 TK = user[0].empresa.bot.token
                 tb = telebot.TeleBot(token=TK, parse_mode=None)
@@ -154,7 +153,6 @@ class event_notification(Resource):
             except Exception as Argument:
                 save_log(Argument)
                 media.close()
-                #remove(path)
                 return
             i = 0
             j = 0
@@ -171,7 +169,7 @@ class event_notification(Resource):
                         #name = nombre.split(" ")
                         if(evento.attach_path.endswith(".mp4")):
                             try:
-                                # Ejemplo tb.send_message('109556849', 'Hola mundo!')
+
                                 tb.send_video(eventos[i].id_chat, media, " " , mensaje)
                                 print("OK")
                                 evento.hora_confirmacion = datetime.datetime.now()
@@ -179,10 +177,8 @@ class event_notification(Resource):
                             except Exception as Argument:
                                 save_log(Argument)
                                 print("time out")
-                                #evento.respuesta =  "Time Out " + str(j) + "/" + str(i)
                                 exito = false
-                                #media.close()
-                                #remove(path)
+
                         else:
                             try:
                                 #print("se intento viejo :C")
@@ -193,24 +189,24 @@ class event_notification(Resource):
                             except Exception as Argument:
                                 save_log(Argument)
                                 print("time out")
-                                #evento.respuesta = "Time Out " + str(j) + "/" + str(i)
+
                                 exito = false
                                 #media.close()
                                 #remove(path)
                     except Exception as Argument:
                         save_log(Argument)
-                        #os.system("sudo systemctl restart datacam_app.service")
+                        os.system("sudo systemctl restart datacam_app.service")
                 i = i+1
             if (exito == true):
                 evento.respuesta = "OK " + str(j) + "/" + str(i)
             else :
                 evento.respuesta =  "Time Out " + str(j) + "/" + str(i)
-            #evento.hora_confirmacion = datetime.datetime.now()
+
             db.session.commit()
             db.session.close()
             media.close()
-            #remove(path)
-            """
+
+            remove(path)
             No_of_files = len(os.listdir(search_path))
             print(No_of_files)
             if(No_of_files > 20):
@@ -218,7 +214,7 @@ class event_notification(Resource):
                 all_files = os.listdir()
                 for f in all_files:
                     os.remove(f)
-            """
+
             return
         except Exception as Argument:
             save_log(Argument)

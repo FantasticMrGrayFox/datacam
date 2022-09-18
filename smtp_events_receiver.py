@@ -81,20 +81,19 @@ class CustomSMTPServer(smtpd.SMTPServer):
 				#ext = mimetypes.guess_extension(part.get_content_type())
 				if not filename:
 					ext = mimetypes.guess_extension(part.get_content_type())
-					#print(ext)
+
 					if not ext:
 						ext = '.bin'
 					filename = f'texto-{counter:03d}{ext}'
 				else:
 					if filename.endswith(".jpg") or filename.endswith(".mp4"):
-						#test_simple_sender.send_p(part.get_payload(decode=True))
 						self._save_media(image = part.get_payload(decode=True),event_json = event_json,exten = filename[-4:])
 				counter += 1
 			self._save_event(event_json)
 			return
 		except Exception as Argument:
 			save_log(Argument, "fallo procesando el mensaje")
-			#os.system("sudo systemctl restart datacam_smtp.service")
+			os.system("sudo systemctl restart datacam_smtp.service")
 			return
 			
 	def _save_media(self,image,event_json,exten):
@@ -115,7 +114,7 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			event_json["imagepath"] = imagen.replace(" ","-")
 		except Exception as Argument:
 			save_log(Argument,"fallo guardando el msj")
-			#os.system("sudo systemctl restart datacam_smtp.service")
+			os.system("sudo systemctl restart datacam_smtp.service")
 
 	def _save_event(self,event_json):
 		try:
@@ -136,7 +135,7 @@ class CustomSMTPServer(smtpd.SMTPServer):
 				respuesta = requests.get(url)
 			except Exception as Argument:
 				save_log(Argument,"error conectando con app.py")
-			""""
+
 			No_of_files = len(os.listdir(image_folder))
 			if(No_of_files > 20):
 				try:	
@@ -146,11 +145,11 @@ class CustomSMTPServer(smtpd.SMTPServer):
 						os.remove(f)
 				except Exception as Argument:
 					save_log(Argument,str("Fallo el proceso de vaciado de la carpeta" + image_folder + ". " +str(No_of_files) + "Archivos restantes" ))
-			"""
 			session.close()
 		except Exception as Argument:
+			
 			save_log(Argument,"error salvando el evento")
-			#os.system("sudo systemctl restart datacam_smtp.service")
+			os.system("sudo systemctl restart datacam_smtp.service")
 image_folder = ""
 server_ip = ""
 server_port = ""
