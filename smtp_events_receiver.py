@@ -105,9 +105,12 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			path = path_wrong.replace(" ","-")
 			try:
 				open(path, 'wb').write(image)
-			except: 
+				print("se pudo guardar a la primera")
+			except:
+				print("no se pudo guardar a la primera")
 				os.mkdir(image_folder)
 				open(path, 'wb').write(image)
+				print("se pudo guardar a la 2da")
 			imagen = str(event_json["device_id"]) + "_" + tiempo + exten
 			event_json["imagepath"] = imagen.replace(" ","-")
 		except Exception as Argument:
