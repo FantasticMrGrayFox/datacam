@@ -133,6 +133,7 @@ class CustomSMTPServer(smtpd.SMTPServer):
 				respuesta = requests.get(url)
 			except Exception as Argument:
 				save_log(Argument,"error conectando con app.py")
+			""""
 			No_of_files = len(os.listdir(image_folder))
 			if(No_of_files > 20):
 				try:	
@@ -142,6 +143,7 @@ class CustomSMTPServer(smtpd.SMTPServer):
 						os.remove(f)
 				except Exception as Argument:
 					save_log(Argument,str("Fallo el proceso de vaciado de la carpeta" + image_folder + ". " +str(No_of_files) + "Archivos restantes" ))
+			"""
 			session.close()
 		except Exception as Argument:
 			save_log(Argument,"error salvando el evento")

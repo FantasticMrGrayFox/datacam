@@ -210,6 +210,7 @@ class event_notification(Resource):
             db.session.close()
             media.close()
             remove(path)
+            """
             No_of_files = len(os.listdir(search_path))
             print(No_of_files)
             if(No_of_files > 20):
@@ -217,6 +218,7 @@ class event_notification(Resource):
                 all_files = os.listdir()
                 for f in all_files:
                     os.remove(f)
+            """
             return
         except Exception as Argument:
             save_log(Argument)
