@@ -127,7 +127,7 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			url = "http://127.0.0.1:5000/event_notification/"+ str(evento.id)+"/" + event_json['imagepath']
 			try:
 				respuesta = requests.get(url)
-			except:
+			except Exception as Argument:
 				save_log(Argument,"error conectando con app.py")
 			No_of_files = len(os.listdir(image_folder))
 			if(No_of_files > 20):
@@ -136,7 +136,7 @@ class CustomSMTPServer(smtpd.SMTPServer):
 					all_files = os.listdir()
 					for f in all_files:
 						os.remove(f)
-				except:
+				except Exception as Argument:
 					save_log(Argument,str("Fallo el proceso de vaciado de la carpeta" + image_folder + ". " +str(No_of_files) + "Archivos restantes" ))
 			session.close()
 		except Exception as Argument:
@@ -183,8 +183,8 @@ try:
 	db_connect = create_engine('mysql+pymysql://'+db_username+':'+db_user_pw+'@'+db_ip+':'+db_port+'/'+db_name)
 	Session = sessionmaker(db_connect)
 	session = Session()
-except:
-	print("Error Conectando con la Base de datos")
+except Exception as Argument:
+	save_log(Argument,"Error Conectando con la Base de datos")
 	
 print("##### Systema de Recepcion de mails ##### \n IP Actual: "+ server_ip +"\n Puerto Actual: "+ server_port + "\n Directorio Actual: "+ path +"\n Nombre de La BD: "+ db_name +"\n IP de la DB: "+ db_ip +"\n Puerto de la DB: "+ db_port +"\n Usuario de la DB: "+ db_username +"\n si desea hace un cambio ingrese los demas valores en el mismo orden\n")
 
