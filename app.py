@@ -64,7 +64,7 @@ db.init_app(app)
 #session = Session()
 
 def save_log(arg):
-    f = open("app_log.txt", "a")
+    f = open("logs/app_log.txt", "a")
     f.write(str(datetime.datetime.now()) + " " +str(arg) + "\n\n")
     f.close()
     return
@@ -209,7 +209,7 @@ class event_notification(Resource):
             db.session.commit()
             db.session.close()
             media.close()
-            remove(path)
+            #remove(path)
             """
             No_of_files = len(os.listdir(search_path))
             print(No_of_files)

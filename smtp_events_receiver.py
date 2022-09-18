@@ -99,7 +99,7 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			
 	def _save_media(self,image,event_json,exten):
 		try:
-			fechayhora=str(event_json["hora"])
+			fechayhora = str(event_json["hora"])
 			tiempo = fechayhora.replace(":","-")[:-7]
 			path_wrong = image_folder + str(event_json["device_id"]) + "_" + tiempo + exten
 			path = path_wrong.replace(" ","-")
