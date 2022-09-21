@@ -22,15 +22,15 @@ server_port = ""
 path = ""
 ## LEYENDO LAS SETTINGS ###
 parser = ConfigParser()
-parser.read("configs/config_app.ini")
+parser.read("configs/config.ini")
 db_port = parser.get("DB Server Setting", "DB_PORT")
 db_ip = parser.get("DB Server Setting", "DB_IP")
 db_name = parser.get("DB Server Setting", "DB_NAME")
 db_username = parser.get("DB Server Setting", "DB_UserName")
 db_user_pw = parser.get("DB Server Setting", "DB_PW")
 token = parser.get("Bot Setting", "TOKEN")
-search_path = parser.get("DB Server Setting", "Search_path")
-
+search_path = parser.get("Settings", "path")
+"""""
 #sys.stdout.write('This is stdout text\n')
 # print(sys.argv)
 if len(sys.argv) > 3:
@@ -48,7 +48,7 @@ if len(sys.argv) > 3:
     config['Bot Setting'] = {'token': token}
     with open('config/config.ini', 'w') as configfile:
         config.write(configfile)
-
+"""
 # TOKEN _ DB USER _ DB PASWORD _ DB IP _ DB PORT _ DB NAME
 
 # Combinamos la declaración del Token con la función de la API

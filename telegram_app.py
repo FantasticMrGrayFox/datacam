@@ -5,11 +5,12 @@ import sys
 import os
 from configparser import ConfigParser
      ## LEYENDO LAS SETTINGS ###
+
 parser = ConfigParser()
-parser.read("configs/config_bot.ini")
-token = parser.get("Settings","TOKEN")
-ip_server = parser.get("Settings","IP db server")
-port_server = parser.get("Settings","Port db server")
+parser.read("configs/config.ini")
+token = parser.get("Bot Settings","TOKEN")
+ip_server = parser.get("API Settings","IP")
+port_server = parser.get("API Settings","PORT")
         #sys.stdout.write('This is stdout text\n')
         #print(sys.argv)
 if len(sys.argv) > 1 :

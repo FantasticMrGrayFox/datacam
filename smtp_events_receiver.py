@@ -22,6 +22,7 @@ def save_log(arg, msj):
     return
 i = 0
 class CustomSMTPServer(smtpd.SMTPServer):
+	
 	def process_message(self, peer, mailfrom, rcpttos, data, mail_options=None, rcpt_options=None):
 		try:
 			i = 0
@@ -66,11 +67,12 @@ class CustomSMTPServer(smtpd.SMTPServer):
 					session.add(event)
 					session.commit()
 					print("clon")
-					#return
+					return
 				event_json['spam'] = event.spameos
 				event_json['clon'] = event.spameos
 			msg = email.message_from_bytes(data, policy=default)
 			counter = 1
+			file_not_saved = True
 			for part in msg.walk():
 				# multipart/* are just containers
 				if part.get_content_maintype() == 'multipart':
@@ -86,8 +88,10 @@ class CustomSMTPServer(smtpd.SMTPServer):
 						ext = '.bin'
 					filename = f'texto-{counter:03d}{ext}'
 				else:
-					if filename.endswith(".jpg") or filename.endswith(".mp4"):
+					
+					if file_not_saved and filename.endswith(".jpg") or filename.endswith(".mp4") :
 						self._save_media(image = part.get_payload(decode=True),event_json = event_json,exten = filename[-4:])
+						file_not_saved = False
 				counter += 1
 			self._save_event(event_json)
 			return
@@ -104,12 +108,9 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			path = path_wrong.replace(" ","-")
 			try:
 				open(path, 'wb').write(image)
-				print("se pudo guardar a la primera")
 			except:
-				print("no se pudo guardar a la primera")
-				os.mkdir(image_folder)
+				os.mkdir("datacam/" + str(image_folder))
 				open(path, 'wb').write(image)
-				print("se pudo guardar a la 2da")
 			imagen = str(event_json["device_id"]) + "_" + tiempo + exten
 			event_json["imagepath"] = imagen.replace(" ","-")
 		except Exception as Argument:
@@ -157,17 +158,16 @@ path = ""
 
      ## LEYENDO LAS SETTINGS ###
 parser = ConfigParser()
-parser.read("configs/config_smtp.ini")
+parser.read("configs/config.ini")
 db_port = parser.get("DB Server Setting","DB_PORT")
 db_ip = parser.get("DB Server Setting","DB_IP")
 db_name = parser.get("DB Server Setting","DB_NAME")
 db_username = parser.get("DB Server Setting","DB_UserName")
 db_user_pw = parser.get("DB Server Setting","DB_PW")
-server_ip  = parser.get("Server Setting","IP")
-server_port = parser.get("Server Setting","PORT")
-image_folder = parser.get("Image Path Setting","path")
-        #sys.stdout.write('This is stdout text\n')
-        #print(sys.argv)
+server_ip  = parser.get("SMTP Settings","IP")
+server_port = parser.get("SMTP Settings","PORT")
+image_folder = parser.get("Settings","path")
+"""""
 if len(sys.argv) > 3 :
     server_ip  = sys.argv[1]
     server_port = sys.argv[2]
@@ -187,6 +187,7 @@ if len(sys.argv) > 3 :
     config['Image Path Settings'] = {'path': path}
     with open('config.ini', 'w') as configfile:
         config.write(configfile)
+"""
 try:
 	db_connect = create_engine('mysql+pymysql://'+db_username+':'+db_user_pw+'@'+db_ip+':'+db_port+'/'+db_name)
 	Session = sessionmaker(db_connect)
