@@ -20,6 +20,9 @@ def save_log(arg, msj):
     f.write(str(datetime.datetime.now()) + " %s  %s \n\n"%(arg,msj) )
     f.close()
     return
+def restart():
+	os.system("sudo systemctl restart datacam_smtp.service")
+	return
 i = 0
 class CustomSMTPServer(smtpd.SMTPServer):
 	
@@ -61,13 +64,13 @@ class CustomSMTPServer(smtpd.SMTPServer):
 					session.commit()
 					print("Hora acutal",now,"Hora limite",event.hora +  datetime.timedelta(seconds = tarpit) )
 					print("spam")
-					return
+					#return
 				if( int(event.image_length) == len(data)):
 					event.repetidas = event.repetidas + 1
 					session.add(event)
 					session.commit()
 					print("clon")
-					return
+					#return
 				event_json['spam'] = event.spameos
 				event_json['clon'] = event.spameos
 			msg = email.message_from_bytes(data, policy=default)
@@ -97,11 +100,12 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			return
 		except Exception as Argument:
 			save_log(Argument, "fallo procesando el mensaje")
-			os.system("sudo systemctl restart datacam_smtp.service")
+			restart()
 			return
 			
 	def _save_media(self,image,event_json,exten):
 		try:
+			print("inicio save media")
 			fechayhora = str(event_json["hora"])
 			tiempo = fechayhora.replace(":","-")[:-7]
 			path_wrong = image_folder + str(event_json["device_id"]) + "_" + tiempo + exten
@@ -115,7 +119,7 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			event_json["imagepath"] = imagen.replace(" ","-")
 		except Exception as Argument:
 			save_log(Argument,"fallo guardando el msj")
-			os.system("sudo systemctl restart datacam_smtp.service")
+			restart()
 
 	def _save_event(self,event_json):
 		try:
@@ -150,7 +154,7 @@ class CustomSMTPServer(smtpd.SMTPServer):
 		except Exception as Argument:
 			
 			save_log(Argument,"error salvando el evento")
-			os.system("sudo systemctl restart datacam_smtp.service")
+			restart()
 image_folder = ""
 server_ip = ""
 server_port = ""
