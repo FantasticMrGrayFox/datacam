@@ -9,8 +9,8 @@ from configparser import ConfigParser
 parser = ConfigParser()
 parser.read("configs/config.ini")
 token = parser.get("Bot Setting","TOKEN")
-ip_server = parser.get("API Setting","IP")
-port_server = parser.get("API Setting","PORT")
+ip_server = parser.get("API Settings","IP")
+port_server = parser.get("API Settings","PORT")
         #sys.stdout.write('This is stdout text\n')
         #print(sys.argv)
 if len(sys.argv) > 1 :
