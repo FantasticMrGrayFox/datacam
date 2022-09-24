@@ -1,4 +1,5 @@
 from email.mime import image
+from statistics import mode
 from sqlalchemy.sql.expression import func
 import smtpd 
 import asyncore
@@ -27,6 +28,7 @@ i = 0
 class CustomSMTPServer(smtpd.SMTPServer):
 	
 	def process_message(self, peer, mailfrom, rcpttos, data, mail_options=None, rcpt_options=None):
+		print(type(test_mode))
 		try:
 			i = 0
 			print('Receiving message from:', peer)
@@ -62,15 +64,18 @@ class CustomSMTPServer(smtpd.SMTPServer):
 					event.spameos = event.spameos + 1
 					session.add(event)
 					session.commit()
-					print("Hora acutal",now,"Hora limite",event.hora +  datetime.timedelta(seconds = tarpit) )
-					print("spam")
-					#return
+					print("Hora acutal",now,"Hora limite",event.hora +  datetime.timedelta(seconds = tarpit) )		
+					if test_mode != "True":
+						print("spam")
+						return
 				if( int(event.image_length) == len(data)):
 					event.repetidas = event.repetidas + 1
 					session.add(event)
 					session.commit()
-					print("clon")
-					#return
+					
+					if test_mode != "True":
+						print("clon")
+						return
 				event_json['spam'] = event.spameos
 				event_json['clon'] = event.spameos
 			msg = email.message_from_bytes(data, policy=default)
@@ -171,6 +176,7 @@ db_user_pw = parser.get("DB Server Setting","DB_PW")
 server_ip  = parser.get("SMTP Settings","IP")
 server_port = parser.get("SMTP Settings","PORT")
 image_folder = parser.get("Settings","path")
+test_mode = parser.get("Settings", "test_mode")
 """""
 if len(sys.argv) > 3 :
     server_ip  = sys.argv[1]

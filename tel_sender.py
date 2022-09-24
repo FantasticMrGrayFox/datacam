@@ -28,7 +28,7 @@ db_ip = parser.get("DB Server Setting", "DB_IP")
 db_name = parser.get("DB Server Setting", "DB_NAME")
 db_username = parser.get("DB Server Setting", "DB_UserName")
 db_user_pw = parser.get("DB Server Setting", "DB_PW")
-token = parser.get("Bot Setting", "TOKEN")
+token = parser.get("Bot Settings", "TOKEN")
 search_path = parser.get("DB Server Setting", "Search_path")
 
 #sys.stdout.write('This is stdout text\n')
