@@ -117,6 +117,8 @@ class CustomSMTPServer(smtpd.SMTPServer):
 			evento.image_length = event_json['length']
 			evento.repetidas = event_json['clon']
 			evento.spameos = event_json['spam']
+			evento.respuesta = _send_notification()
+			evento.hora_confirmacion = datetime.datetime.now()
 			session.add(evento)
 			session.commit()
 			session.flush()
