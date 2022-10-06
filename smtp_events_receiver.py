@@ -22,6 +22,7 @@ def save_log(arg, msj):
     f.close()
     return
 def restart():
+	save_log("sistema reinicido por las malas","que macana")
 	os.system("sudo systemctl restart datacam_smtp.service")
 	return
 i = 0

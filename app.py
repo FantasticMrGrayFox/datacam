@@ -68,6 +68,10 @@ def save_log(arg):
     f.write(str(datetime.datetime.now()) + " " +str(arg) + "\n\n")
     f.close()
     return
+def restart():
+	save_log("sistema reinicido por las malas")
+	os.system("sudo systemctl restart datacam_app.service")
+	return
 
 
 
@@ -218,7 +222,7 @@ class event_notification(Resource):
             return
         except Exception as Argument:
             save_log(Argument)
-            #os.system("sudo systemctl restart datacam_app.service")
+            os.system("sudo systemctl restart datacam_app.service")
 # ------------------- . ------------------- #
 
 
